@@ -1,9 +1,6 @@
 const mailer = require("nodemailer");
 
-export default function handler(
-  req,
-  res
-) {
+export default function handler(req, res) {
   //res.status(200).json({ name: "John Doe" });
   const smtpTransport = mailer.createTransport({
     service: "gmail",
@@ -30,12 +27,14 @@ export default function handler(
   };
 
   try {
-    const result = smtpTransport.sendMail(mail);
-    if (!result.reject) {
-      res.status(200).json({ message: "Enviado" });
-    } else {
-      res.status(500).json({ message: result.reject });
-    }
+    smtpTransport
+      .sendMail(mail)
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        res.status(202).json(error);
+      });
   } catch (erro) {
     res.status(500).json({ message: result.reject });
   }

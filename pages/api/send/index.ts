@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-type Data = { message:string };
+type Data = { message: string };
 const mailer = require("nodemailer");
 
 export default function handler(
@@ -31,6 +31,8 @@ export default function handler(
     <p>`,
   };
 
+  /*
+  *Old
   try {
     const result = smtpTransport.sendMail(mail);
     if (!result.reject) {
@@ -38,6 +40,22 @@ export default function handler(
     } else {
       res.status(500).json({ message: result.reject });
     }
+  } catch (erro) {
+    res.status(500).json({ message: "Internal error" });
+  }*/
+
+  try {
+    smtpTransport
+      .sendMail(mail)
+      .then((response: any) => {
+        smtpTransport.close();
+        //res.status(200).json({ message: "Enviado" });
+        return res.status(200).json(response);
+      })
+      .catch((error: any) => {
+        smtpTransport.close();
+        return res.status(202).json(error);
+      });
   } catch (erro) {
     res.status(500).json({ message: "Internal error" });
   }
