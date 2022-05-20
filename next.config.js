@@ -8,7 +8,7 @@ module.exports = {
         destination: "/:path*",
       },
       {
-        source: "/:path*",
+        source: "/_next/:path*",
         destination: "https://credrapidoaraxa.netlify.app/:path*",
       },
     ];
